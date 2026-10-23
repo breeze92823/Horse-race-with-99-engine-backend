@@ -61,7 +61,7 @@ export class WorldRoom extends Room<{ state: WorldState }> {
           { _id: userId },
           {
             // Display name comes from this connection's own PlayerState, not `msg`.
-            $set: { ...rest, username: p.username || "Player", updatedAt: new Date() },
+            $set: { ...rest, username: p.username || "Player", avatar: p.avatar, updatedAt: new Date() },
             ...(bestDistance !== undefined && { $max: { bestDistance } }),
             $setOnInsert: { version: 1 },
           },

@@ -1,4 +1,4 @@
-import { LEADERBOARD_EVERY_MS, LEADERBOARD_SIZE, LEADERBOARD_STATS, type LeaderboardStat } from "./constants.js";
+import { LEADERBOARD_EVERY_MS, LEADERBOARD_SIZE, PRESENCE_PETS_MAX, LEADERBOARD_STATS, type LeaderboardStat } from "./constants.js";
 import { getPlayers } from "./db.js";
 
 // The plaza's four leaderboard boards (client plaza.js): the top LEADERBOARD_SIZE saved players by
@@ -10,6 +10,8 @@ import { getPlayers } from "./db.js";
 export interface LeaderRow {
   name: string;
   value: number;
+  avatar?: string; // Bloxity look JSON, "" = default (only the top row of a board carries it)
+  pets?: string; // equipped pets "kind:tier,kind:tier"
 }
 export type Boards = Record<LeaderboardStat, LeaderRow[]>;
 export type Ranks = Record<LeaderboardStat, number | null>;
@@ -42,11 +44,22 @@ async function readBoards(): Promise<Boards> {
   await Promise.all(
     LEADERBOARD_STATS.map(async (stat) => {
       const docs = await players
-        .find({ [stat]: { $gt: 0 } }, { projection: { username: 1, [stat]: 1 } })
+        .find({ [stat]: { $gt: 0 } }, { projection: { username: 1, avatar: 1, pets: 1, [stat]: 1 } })
         .sort({ [stat]: -1 })
         .limit(LEADERBOARD_SIZE)
         .toArray();
-      boards[stat] = docs.map((d) => ({ name: d.username || "Player", value: Number(d[stat]) || 0 }));
+      boards[stat] = docs.map((d, i) => {
+        const row: LeaderRow = { name: d.username || "Player", value: Number(d[stat]) || 0 };
+        if (i === 0) {
+          row.avatar = d.avatar || "";
+          row.pets = (d.pets ?? [])
+            .filter((pet) => pet.equipped)
+            .slice(0, PRESENCE_PETS_MAX)
+            .map((pet) => `${pet.kind}:${pet.tier}`)
+            .join(",");
+        }
+        return row;
+      });
     }),
   );
   return boards;

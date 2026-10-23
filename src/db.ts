@@ -11,6 +11,7 @@ import { LEADERBOARD_STATS } from "./constants.js";
 export interface PlayerDoc {
   _id: string; // Bloxity user id -- see WorldRoom.ts (guests are never saved)
   username?: string; // display name as of the last save
+  avatar?: string; // Bloxity look JSON as of the last save (shown on the leaderboards' top figures)
   trophies?: number; // Wins (the HUD's trophy counter, the shop currency)
   gems?: number;
   energy?: number; // lightning (rebirth.js), the race speed
