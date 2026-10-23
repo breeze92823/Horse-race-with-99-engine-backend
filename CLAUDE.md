@@ -1,4 +1,4 @@
-# Horse Race with 99 Engine — BACKEND (game server)
+# Horse Race — BACKEND (game server)
 
 Frontend (3D client) lives at `../Horse-race`. Colyseus + Mongo, ported from `C:\ThreeJS\Kayak-and-surf\Kayak-and-surf -backend`.
 

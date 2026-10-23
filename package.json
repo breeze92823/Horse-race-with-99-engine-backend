@@ -2,7 +2,7 @@
   "private": true,
   "name": "horse-race-with-99-engine-server",
   "version": "0.1.0",
-  "description": "Colyseus server for Horse Race with 99 Engine: progress saving and the room roster",
+  "description": "Colyseus server for Horse Race: progress saving and the room roster",
   "type": "module",
   "main": "build/index.js",
   "engines": {
