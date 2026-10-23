@@ -25,7 +25,7 @@ export const REBIRTHS_MAX = 1e9;
 export const DISTANCE_MAX = 1e15; // personal best race distance, studs
 export const PLAY_SECONDS_MAX = 31_536_000; // ~1 year
 
-// Owned catalog ids (client BOATS.list ~20, ENGINE ~34, PARTNER ~20, TRAILS ~29), with slack.
+// Owned catalog ids (client HORSES.list ~20, ENGINE ~34, PARTNER ~20, TRAILS ~29), with slack.
 export const OWNED_MAX = 256;
 // Pets (client PETS): at most PETS_MAX owned, PET_TIERS_MAX craft tiers, slots / storage the
 // counters can grow to.
@@ -62,7 +62,7 @@ export type LeaderboardStat = (typeof LEADERBOARD_STATS)[number];
 export const LEADERBOARD_SIZE = 10;
 export const LEADERBOARD_EVERY_MS = 60 * 1000;
 
-// Ids from the client's catalogs (boats, engines incl. `ladder-N`, partners, trails, pet kinds,
+// Ids from the client's catalogs (horses, engines incl. `ladder-N`, partners, trails, pet kinds,
 // potions): camelCase slugs, so nothing odd is stored.
 export const ID_PATTERN = /^[A-Za-z0-9_-]{1,32}$/;
 

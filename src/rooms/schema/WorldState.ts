@@ -15,7 +15,7 @@ export const PlayerState = schema(
     z: t.float64().default(0),
     yaw: t.float32().default(0), // heading, rad (PI = facing the gate)
     speed: t.float32().default(0), // m/s, for flames and dead reckoning
-    boat: t.string().default(""), // equipped catalog ids (client config.js), "" = none / default
+    horse: t.string().default(""), // equipped catalog ids (client config.js), "" = none / default
     engine: t.string().default(""),
     trail: t.string().default(""),
     partner: t.string().default(""),

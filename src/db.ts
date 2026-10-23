@@ -18,8 +18,8 @@ export interface PlayerDoc {
   autoRebirth?: boolean;
   bestDistance?: number; // personal best race, studs (only ever goes up)
   playtime?: number; // s with the game visible
-  boats?: string[]; // owned boat ids (client BOATS.list)
-  boat?: string; // the equipped boat (an owned one)
+  horses?: string[]; // owned horse ids (client HORSES.list)
+  horse?: string; // the equipped horse (an owned one)
   engines?: string[]; // owned engine ids (client engine.js ENGINES)
   engine?: string; // the equipped engine, "" = none
   partners?: string[]; // owned partner ids (client PARTNER.partners)

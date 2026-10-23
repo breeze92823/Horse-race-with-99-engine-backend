@@ -9,7 +9,7 @@ const finite = (v: unknown): v is number => typeof v === "number" && Number.isFi
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 const isId = (v: unknown): v is string => typeof v === "string" && ID_PATTERN.test(v);
 
-// `pose` { x, y, z, yaw, speed }: the boat's feet position in TRACK coordinates (z minus the
+// `pose` { x, y, z, yaw, speed }: the horse's feet position in TRACK coordinates (z minus the
 // sender's race scroll, so racers line up in everyone's lane), heading (rad) and speed (m/s).
 export function applyPose(p: PlayerState, msg: unknown): void {
   if (!msg || typeof msg !== "object") return;
@@ -22,12 +22,12 @@ export function applyPose(p: PlayerState, msg: unknown): void {
   if (finite(m.speed)) p.speed = clamp(m.speed, 0, b.speed);
 }
 
-// `loadout` { boat, engine, trail, partner, pets: [{ kind, tier }], world }: equipped catalog ids
+// `loadout` { horse, engine, trail, partner, pets: [{ kind, tier }], world }: equipped catalog ids
 // ("" = none) and the world the player is in (clients only draw players in their own world). Pets travel as "kind:tier" joined by commas, capped at PRESENCE_PETS_MAX.
 export function applyLoadout(p: PlayerState, msg: unknown): void {
   if (!msg || typeof msg !== "object") return;
   const m = msg as Record<string, unknown>;
-  for (const key of ["boat", "engine", "trail", "partner", "world"] as const) {
+  for (const key of ["horse", "engine", "trail", "partner", "world"] as const) {
     const v = m[key];
     if (v === "" || isId(v)) p[key] = v as string;
   }

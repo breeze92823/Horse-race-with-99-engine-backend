@@ -14,7 +14,7 @@ describe("progress", () => {
   afterEach(() => __setPlayersForTest(null));
 
   it("sends a saved player their progress and saves what they send back", async () => {
-    const fake = fakePlayers([{ _id: "u1", trophies: 5000, boats: ["raft", "canoe"], boat: "canoe", bestDistance: 900, version: 1, updatedAt: new Date() }]);
+    const fake = fakePlayers([{ _id: "u1", trophies: 5000, horses: ["pony", "palomino"], horse: "palomino", bestDistance: 900, version: 1, updatedAt: new Date() }]);
     __setPlayersForTest(fake);
     const room = await colyseus.createRoom<WorldState>("world", {});
     const c = await colyseus.connectTo(room, { userId: "u1", username: "Ann" });
@@ -23,8 +23,8 @@ describe("progress", () => {
     fake.release();
     await sleep(150);
     assert.strictEqual(got?.trophies, 5000);
-    assert.deepStrictEqual(got?.boats, ["raft", "canoe"]);
-    assert.strictEqual(got?.boat, "canoe");
+    assert.deepStrictEqual(got?.horses, ["pony", "palomino"]);
+    assert.strictEqual(got?.horse, "palomino");
 
     c.send("saveProgress", { trophies: 7000, gems: 3, bestDistance: 400, engines: ["basic"], engine: "basic", hack: 1 });
     await sleep(150);

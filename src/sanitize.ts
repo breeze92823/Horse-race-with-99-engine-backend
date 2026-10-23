@@ -18,7 +18,7 @@ function isObject(v: unknown): v is Record<string, unknown> {
 }
 const isId = (v: unknown): v is string => typeof v === "string" && ID_PATTERN.test(v);
 
-// Catalog ids (boats, engines, partners, trails): slug strings, no duplicates, bounded count.
+// Catalog ids (horses, engines, partners, trails): slug strings, no duplicates, bounded count.
 export function sanitizeIds(raw: unknown, max = OWNED_MAX): string[] {
   if (!Array.isArray(raw)) return [];
   return [...new Set(raw.filter(isId))].slice(0, max);
@@ -53,7 +53,7 @@ function sanitizePotions(raw: unknown): Record<string, number> {
 
 // One owned list + its equipped id. The equipped one must be owned ("" = none); when this save
 // doesn't carry the list, trust the id's shape only.
-function ownedPair(raw: Record<string, unknown>, out: Partial<PlayerDoc>, listKey: "boats" | "engines" | "partners" | "trails", idKey: "boat" | "engine" | "partner" | "trail") {
+function ownedPair(raw: Record<string, unknown>, out: Partial<PlayerDoc>, listKey: "horses" | "engines" | "partners" | "trails", idKey: "horse" | "engine" | "partner" | "trail") {
   if (raw[listKey] !== undefined) out[listKey] = sanitizeIds(raw[listKey]);
   const id = raw[idKey];
   const owned = out[listKey];
@@ -77,7 +77,7 @@ export function sanitizeProgress(raw: unknown): Partial<PlayerDoc> | null {
   if (finite(raw.playtime)) out.playtime = clampInt(raw.playtime, PLAY_SECONDS_MAX);
   if (finite(raw.lastSeen)) out.lastSeen = clampInt(raw.lastSeen, Date.now() + 10 * 60 * 1000);
 
-  ownedPair(raw, out, "boats", "boat");
+  ownedPair(raw, out, "horses", "horse");
   ownedPair(raw, out, "engines", "engine");
   ownedPair(raw, out, "partners", "partner");
   ownedPair(raw, out, "trails", "trail");

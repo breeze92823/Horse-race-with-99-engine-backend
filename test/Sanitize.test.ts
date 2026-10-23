@@ -17,9 +17,9 @@ describe("sanitizeProgress", () => {
   });
 
   it("keeps well-formed catalog ids and only equips an owned one", () => {
-    const out = sanitizeProgress({ boats: ["raft", "canoe", "canoe", "Bad Id!", 7], boat: "canoe", engines: ["basic", "ladder-3"], engine: "ladder-9" })!;
-    assert.deepStrictEqual(out.boats, ["raft", "canoe"]);
-    assert.strictEqual(out.boat, "canoe");
+    const out = sanitizeProgress({ horses: ["pony", "palomino", "palomino", "Bad Id!", 7], horse: "palomino", engines: ["basic", "ladder-3"], engine: "ladder-9" })!;
+    assert.deepStrictEqual(out.horses, ["pony", "palomino"]);
+    assert.strictEqual(out.horse, "palomino");
     assert.deepStrictEqual(out.engines, ["basic", "ladder-3"]);
     assert.strictEqual(out.engine, undefined);
     assert.strictEqual(sanitizeProgress({ partner: "" })!.partner, "");
