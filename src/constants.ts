@@ -62,6 +62,24 @@ export type LeaderboardStat = (typeof LEADERBOARD_STATS)[number];
 export const LEADERBOARD_SIZE = 10;
 export const LEADERBOARD_EVERY_MS = 60 * 1000;
 
+// Boxity leaderboards (boxityBoards.ts, docs.bloxity.io LEADERBOARDS): the boards on the game page
+// and behind the in-game trophy button. The client declares the same list (config.js
+// BOXITY_BOARDS, keep in step by hand). The FIRST declaration creates a board; after that the
+// Boxity dashboard owns its settings, so ids are permanent. Wins and Power rank the current value
+// like the plaza's boards (both are spent), Rebirths only ever goes up.
+export const BOXITY_BOARDS = [
+  { id: "wins", label: "Wins", order: "desc", mode: "latest", format: "compact", reset: "none" },
+  { id: "power", label: "Power", order: "desc", mode: "latest", format: "compact", reset: "none" },
+  { id: "rebirths", label: "Rebirths", order: "desc", mode: "best", format: "number", reset: "none" },
+] as const;
+export type BoxityBoardId = (typeof BOXITY_BOARDS)[number]["id"];
+// The saved doc field each board ranks.
+export const BOXITY_BOARD_FIELDS: Record<BoxityBoardId, "trophies" | "energy" | "rebirths"> = { wins: "trophies", power: "energy", rebirths: "rebirths" };
+// Scores are batched: the changed players' scores every BOXITY_REPORT_MS (and on shutdown), at
+// most BOXITY_SCORES_PER_CALL per request (Boxity's limit).
+export const BOXITY_REPORT_MS = 20 * 1000;
+export const BOXITY_SCORES_PER_CALL = 200;
+
 // Ids from the client's catalogs (horses, engines incl. `ladder-N`, partners, trails, pet kinds,
 // potions): camelCase slugs, so nothing odd is stored.
 export const ID_PATTERN = /^[A-Za-z0-9_-]{1,32}$/;

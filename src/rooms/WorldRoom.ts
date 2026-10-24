@@ -5,7 +5,8 @@ import { getPlayers, type PlayerDoc } from "../db.js";
 import { sanitizeProgress } from "../sanitize.js";
 import { accrue, rollWedge, spinStateFrom, type SpinState } from "../spin.js";
 import { claimDaily, dailyFields, dailyView, readDaily, rollDaily, type DailyState } from "../daily.js";
-import { applyAvatar, applyLoadout, applyPose } from "../presence.js";
+import { applyAvatar, applyEmote, applyLoadout, applyPose } from "../presence.js";
+import { markScores } from "../boxityBoards.js";
 import { ranksOf, topBoards } from "../leaderboard.js";
 
 function sanitizeName(raw: unknown): string {
@@ -67,6 +68,7 @@ export class WorldRoom extends Room<{ state: WorldState }> {
           },
           { upsert: true },
         );
+        markScores(userId); // the Boxity leaderboards read the stored doc (boxityBoards.ts)
       } catch (err) {
         console.warn("[WorldRoom] saveProgress failed", err);
       }
@@ -128,6 +130,11 @@ export class WorldRoom extends Room<{ state: WorldState }> {
     setAvatar: (client: Client, msg: unknown) => {
       const p = this.state.players.get(client.sessionId);
       if (p) applyAvatar(p, msg);
+    },
+    // A Boxity emote started ({ id }: its catalog id) or ended ({ id: "" }).
+    emote: (client: Client, msg: unknown) => {
+      const p = this.state.players.get(client.sessionId);
+      if (p) applyEmote(p, msg);
     },
     // Re-states identity after a login/logout that happens AFTER join (a guest who signs in
     // mid-session). The server answers with progress/noProgress for the new identity.
@@ -263,6 +270,7 @@ export class WorldRoom extends Room<{ state: WorldState }> {
     this.loaded.delete(client.sessionId); // no writes until the new identity's save is read
     this.spinStates.delete(client.sessionId); // nor spins
     p.signedIn = !!userId;
+    p.userId = userId;
 
     if (userId) {
       // Evict any OTHER live session already claiming this account, so one account never has
@@ -312,6 +320,7 @@ export class WorldRoom extends Room<{ state: WorldState }> {
     const now = Date.now();
     const spin = spinStateFrom(doc, now);
     this.spinStates.set(client.sessionId, spin);
+    if (doc) markScores(userId);
     if (!doc) client.send("noProgress", { serverTime: now });
     else client.send("progress", { ...(sanitizeProgress(doc) ?? {}), serverTime: now });
     client.send("spins", this.spinView(spin, now));

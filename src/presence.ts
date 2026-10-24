@@ -48,3 +48,11 @@ export function applyAvatar(p: PlayerState, msg: unknown): void {
   const a = (msg as { avatar?: unknown })?.avatar;
   if (typeof a === "string" && a.length <= AVATAR_MAX_LEN) p.avatar = a;
 }
+
+// `emote` { id }: the Boxity emote catalog id the player started (24 hex chars today), "" when it
+// ended. Stored as "<id>:<n>" with n counting the plays, so starting the same emote again is a change.
+export function applyEmote(p: PlayerState, msg: unknown): void {
+  const id = (msg as { id?: unknown })?.id;
+  if (id === "") p.emote = "";
+  else if (typeof id === "string" && /^[A-Za-z0-9]{1,32}$/.test(id)) p.emote = `${id}:${(Number(p.emote.split(":")[1]) || 0) + 1}`;
+}
