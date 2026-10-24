@@ -6,6 +6,7 @@ export const PlayerState = schema(
   {
     username: t.string().default(""), // client-reported Bloxity displayName/username, not validated
     signedIn: t.boolean().default(false), // has a Bloxity id: only signed-in players are saved
+    userId: t.string().default(""), // that Bloxity id ("" = guest): Boxity chat messages name their sender by it
     pfp: t.string().default(""), // Bloxity profile picture URL ("" = none), for the others' racer heads
     racing: t.boolean().default(false), // in a race right now (`race` message)
     distance: t.float64().default(0), // this race's distance so far, studs
@@ -22,6 +23,7 @@ export const PlayerState = schema(
     pets: t.string().default(""), // equipped pets "kind:tier,kind:tier"
     world: t.string().default(""), // the world the player is in (client WORLDS id), "" = the start world
     avatar: t.string().default(""), // Bloxity look JSON { equipped, proportions, skin }, "" = default
+    emote: t.string().default(""), // the Boxity emote playing, "<catalog id>:<n>" (n counts plays, so a replay shows), "" = none
   },
   "PlayerState",
 );
